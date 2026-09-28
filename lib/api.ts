@@ -1,8 +1,13 @@
 import axios from "axios"
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://telemed-ai-backend-jdui.onrender.com/api/v1"
+    : "http://127.0.0.1:8000/api/v1")
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -31,7 +36,6 @@ api.interceptors.response.use(
       const { status, data } = error.response
       console.error(`[API] Error ${status}:`, data)
 
-      // Handle specific status codes
       switch (status) {
         case 401:
           console.warn("[API] Unauthorized access")
@@ -50,7 +54,4 @@ api.interceptors.response.use(
   }
 )
 
-
-
 export default api
-
